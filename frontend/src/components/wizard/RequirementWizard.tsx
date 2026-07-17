@@ -88,8 +88,8 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
       brandStyle: formData.brandStyle || 'Modern & Vibrant',
       colorPreference: formData.colorPreference || COLOR_PRESETS[0],
       typography: formData.typography || { heading: 'Outfit', body: 'Inter' },
-      primaryKeyword: formData.primaryKeyword || 'Digital Publishing',
-      secondaryKeywords: formData.secondaryKeywords || ['SEO Guidelines', 'Core Web Vitals', 'AdSense Readiness'],
+      primaryKeyword: formData.primaryKeyword || 'Articles',
+      secondaryKeywords: formData.secondaryKeywords || ['Guide', 'Tutorial'],
       numberPages: formData.numberPages || 8,
       needBlog: formData.needBlog ?? true,
       needAdminPanel: formData.needAdminPanel ?? true,
@@ -116,17 +116,17 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto animate-in fade-in duration-200">
-      <div className="relative w-full max-w-4xl rounded-3xl border border-indigo-500/30 bg-[#0d1224] p-6 sm:p-8 shadow-2xl shadow-black/90 glow-border my-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 overflow-y-auto animate-in fade-in duration-200">
+      <div className="relative w-full max-w-4xl rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xl my-auto">
         {/* Header & Steps Indicator */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-border/60 pb-6 gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-100 pb-6 gap-4">
           <div>
-            <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-indigo-600 font-bold text-xs uppercase tracking-wider">
               <Sparkles className="h-4 w-4" />
-              Step 1: Requirement Collection Pipeline
+              Step {step}: Requirement Collection Pipeline
             </div>
-            <h2 className="mt-1 text-2xl font-black text-white">Create New AdSense-Ready Website</h2>
-            <p className="text-sm text-slate-400">Configure 22 workflow parameters to trigger our 16 specialized AI agents.</p>
+            <h2 className="mt-1 text-2xl font-black text-slate-900">Create New AdSense-Ready Website</h2>
+            <p className="text-sm text-slate-500">Configure 22 workflow parameters to trigger our 16 specialized AI agents.</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -135,15 +135,15 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all ${
                     step === i
-                      ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/40 ring-4 ring-indigo-500/20'
+                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30 ring-4 ring-indigo-100'
                       : step > i
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                      : 'bg-slate-800 text-slate-500 border border-slate-700'
+                      ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
+                      : 'bg-slate-100 text-slate-500 border border-slate-200'
                   }`}
                 >
                   {step > i ? <Check className="h-4 w-4 stroke-[3]" /> : i}
                 </div>
-                {i < 4 && <div className={`h-0.5 w-6 ${step > i ? 'bg-emerald-500/40' : 'bg-slate-800'}`} />}
+                {i < 4 && <div className={`h-0.5 w-6 ${step > i ? 'bg-emerald-400' : 'bg-slate-200'}`} />}
               </div>
             ))}
           </div>
@@ -153,53 +153,53 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
           {/* Step 1: Core Website & Target Identity */}
           {step === 1 && (
             <div className="space-y-5 animate-in fade-in duration-200">
-              <div className="flex items-center gap-2 text-base font-bold text-white border-b border-border/40 pb-2">
-                <Globe className="h-5 w-5 text-indigo-400" />
+              <div className="flex items-center gap-2 text-base font-bold text-slate-900 border-b border-slate-100 pb-2">
+                <Globe className="h-5 w-5 text-indigo-600" />
                 Core Website & Audience Identity
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300">Website Name</label>
+                  <label className="block text-xs font-semibold text-slate-700">Website Name</label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
                     placeholder="e.g. Utsav India"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/40 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300">Domain Name (.com / .in / .io)</label>
+                  <label className="block text-xs font-semibold text-slate-700">Domain Name (.com / .in / .io)</label>
                   <input
                     type="text"
                     value={formData.domain}
                     onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
                     required
                     placeholder="e.g. utsavindia.com"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/40 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300">Category / Niche</label>
+                  <label className="block text-xs font-semibold text-slate-700">Category / Niche</label>
                   <input
                     type="text"
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                     placeholder="Cultural Heritage & Festivals"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/40 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300">Website Type</label>
+                  <label className="block text-xs font-semibold text-slate-700">Website Type</label>
                   <select
                     value={formData.websiteType}
                     onChange={(e) => setFormData({ ...formData, websiteType: e.target.value as any })}
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/60 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                   >
                     <option value="Blog">Blog & Guides Portal</option>
                     <option value="Magazine">Digital Magazine</option>
@@ -208,25 +208,25 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300">Target Country</label>
+                  <label className="block text-xs font-semibold text-slate-700">Target Country</label>
                   <input
                     type="text"
                     value={formData.country}
                     onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                     placeholder="e.g. India, United States, Global"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/40 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300">Primary Audience Demographic</label>
+                <label className="block text-xs font-semibold text-slate-700">Primary Audience Demographic</label>
                 <input
                   type="text"
                   value={formData.primaryAudience}
                   onChange={(e) => setFormData({ ...formData, primaryAudience: e.target.value })}
                   placeholder="Global Indian Diaspora, Cultural Enthusiasts & Travelers"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/40 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                 />
               </div>
             </div>
@@ -235,13 +235,13 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
           {/* Step 2: Brand & Design System */}
           {step === 2 && (
             <div className="space-y-5 animate-in fade-in duration-200">
-              <div className="flex items-center gap-2 text-base font-bold text-white border-b border-border/40 pb-2">
-                <Palette className="h-5 w-5 text-indigo-400" />
+              <div className="flex items-center gap-2 text-base font-bold text-slate-900 border-b border-slate-100 pb-2">
+                <Palette className="h-5 w-5 text-indigo-600" />
                 Brand Styling & Design System Tokens
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300">Curated Color Palette Preset</label>
+                <label className="block text-xs font-semibold text-slate-700">Curated Color Palette Preset</label>
                 <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {COLOR_PRESETS.map((preset, idx) => (
                     <button
@@ -250,20 +250,20 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
                       onClick={() => setFormData({ ...formData, colorPreference: preset })}
                       className={`flex items-center justify-between rounded-xl border p-3.5 text-left transition-all ${
                         formData.colorPreference?.primary === preset.primary
-                          ? 'border-indigo-500 bg-indigo-500/15 ring-2 ring-indigo-500/20'
-                          : 'border-slate-800 bg-slate-900/60 hover:border-slate-700'
+                          ? 'border-indigo-600 bg-indigo-50 shadow-sm ring-1 ring-indigo-600 font-bold'
+                          : 'border-slate-200 bg-slate-50 hover:bg-slate-100'
                       }`}
                     >
                       <div>
-                        <div className="text-xs font-bold text-white">{preset.name}</div>
+                        <div className="text-xs font-bold text-slate-900">{preset.name}</div>
                         <div className="mt-1.5 flex items-center gap-1.5">
-                          <span className="h-4 w-4 rounded-full border border-white/20" style={{ backgroundColor: preset.primary }} />
-                          <span className="h-4 w-4 rounded-full border border-white/20" style={{ backgroundColor: preset.secondary }} />
-                          <span className="h-4 w-4 rounded-full border border-white/20" style={{ backgroundColor: preset.accent }} />
+                          <span className="h-4 w-4 rounded-full border border-slate-300 shadow-2xs" style={{ backgroundColor: preset.primary }} />
+                          <span className="h-4 w-4 rounded-full border border-slate-300 shadow-2xs" style={{ backgroundColor: preset.secondary }} />
+                          <span className="h-4 w-4 rounded-full border border-slate-300 shadow-2xs" style={{ backgroundColor: preset.accent }} />
                         </div>
                       </div>
                       {formData.colorPreference?.primary === preset.primary && (
-                        <Check className="h-4 w-4 text-indigo-400 shrink-0" />
+                        <Check className="h-4 w-4 text-indigo-600 shrink-0 stroke-[3]" />
                       )}
                     </button>
                   ))}
@@ -272,11 +272,11 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300">Brand Vibe & Style</label>
+                  <label className="block text-xs font-semibold text-slate-700">Brand Vibe & Style</label>
                   <select
                     value={formData.brandStyle}
                     onChange={(e) => setFormData({ ...formData, brandStyle: e.target.value as BrandStyle })}
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/60 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                   >
                     <option value="Modern & Vibrant">Modern & Vibrant (Engaging, Gradient Rich)</option>
                     <option value="Clean & Minimalist">Clean & Minimalist (High-Readability White/Slate)</option>
@@ -285,14 +285,14 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300">Typography Font Pairings</label>
+                  <label className="block text-xs font-semibold text-slate-700">Typography Font Pairings</label>
                   <select
                     value={`${formData.typography?.heading || 'Outfit'}|${formData.typography?.body || 'Inter'}`}
                     onChange={(e) => {
                       const [heading, body] = e.target.value.split('|');
                       setFormData({ ...formData, typography: { heading, body } });
                     }}
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/60 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                   >
                     <option value="Outfit|Inter">Outfit (Headings) + Inter (Body) - Recommended</option>
                     <option value="Inter|Fira Code">Inter (Headings) + Fira Code (Technical)</option>
@@ -306,28 +306,28 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
           {/* Step 3: Keywords & Content Depth Strategy */}
           {step === 3 && (
             <div className="space-y-5 animate-in fade-in duration-200">
-              <div className="flex items-center gap-2 text-base font-bold text-white border-b border-border/40 pb-2">
-                <Search className="h-5 w-5 text-indigo-400" />
+              <div className="flex items-center gap-2 text-base font-bold text-slate-900 border-b border-slate-100 pb-2">
+                <Search className="h-5 w-5 text-indigo-600" />
                 Keyword Research & Content Planning Strategy
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300">Primary Target Keyword</label>
+                <label className="block text-xs font-semibold text-slate-700">Primary Target Keyword</label>
                 <input
                   type="text"
                   value={formData.primaryKeyword}
                   onChange={(e) => setFormData({ ...formData, primaryKeyword: e.target.value })}
                   required
                   placeholder="e.g. Indian Festivals"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/40 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                 />
-                <p className="mt-1 text-[11px] text-slate-400">
+                <p className="mt-1 text-[11px] text-slate-500">
                   Our Research Agent uses this topic to evaluate top 10 search intents and construct high-ranking article outlines.
                 </p>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300">
+                <label className="block text-xs font-semibold text-slate-700">
                   Secondary Keywords / Long-Tail Topics (Comma Separated)
                 </label>
                 <textarea
@@ -335,12 +335,12 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
                   value={secKeywordInput}
                   onChange={(e) => setSecKeywordInput(e.target.value)}
                   placeholder="Diwali rituals, Holi colors science, Navratri Garba guide, Durga Puja pandals, Eco-friendly Diwali"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-black/40 px-3.5 py-2.5 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 focus:border-indigo-600 focus:bg-white focus:outline-none shadow-2xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300">
+                <label className="block text-xs font-semibold text-slate-700">
                   Initial Number of Articles / Pages to Generate (1,500+ Words Each)
                 </label>
                 <div className="mt-2 flex items-center gap-4">
@@ -350,9 +350,9 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
                     max="15"
                     value={formData.numberPages}
                     onChange={(e) => setFormData({ ...formData, numberPages: parseInt(e.target.value) })}
-                    className="w-full accent-indigo-500"
+                    className="w-full accent-indigo-600"
                   />
-                  <span className="flex h-10 w-16 items-center justify-center rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-base font-black text-indigo-300 shrink-0">
+                  <span className="flex h-10 w-16 items-center justify-center rounded-xl bg-indigo-50 border border-indigo-200 text-base font-black text-indigo-700 shrink-0 shadow-2xs">
                     {formData.numberPages}
                   </span>
                 </div>
@@ -363,8 +363,8 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
           {/* Step 4: Features & Monetization Checklist */}
           {step === 4 && (
             <div className="space-y-5 animate-in fade-in duration-200">
-              <div className="flex items-center gap-2 text-base font-bold text-white border-b border-border/40 pb-2">
-                <Sliders className="h-5 w-5 text-indigo-400" />
+              <div className="flex items-center gap-2 text-base font-bold text-slate-900 border-b border-slate-100 pb-2">
+                <Sliders className="h-5 w-5 text-indigo-600" />
                 Technical Features, PHP Backend & AdSense Slot Configuration
               </div>
 
@@ -387,17 +387,17 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
                     key={item.key}
                     className={`flex items-center gap-3 rounded-xl border p-3 cursor-pointer transition-all ${
                       (formData as any)[item.key]
-                        ? 'border-indigo-500/80 bg-indigo-500/15 text-white shadow-sm shadow-indigo-500/10'
-                        : 'border-slate-800 bg-slate-900/40 text-slate-400 hover:border-slate-700'
+                        ? 'border-indigo-600 bg-indigo-50 text-indigo-950 font-bold shadow-2xs'
+                        : 'border-slate-200 bg-slate-50/80 text-slate-600 hover:border-slate-300 hover:bg-slate-100'
                     }`}
                   >
                     <input
                       type="checkbox"
                       checked={!!(formData as any)[item.key]}
                       onChange={(e) => setFormData({ ...formData, [item.key]: e.target.checked })}
-                      className="rounded border-slate-700 bg-black/60 text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                      className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-600 h-4 w-4 accent-indigo-600"
                     />
-                    <span className="text-sm font-semibold flex items-center gap-1.5">
+                    <span className="text-sm flex items-center gap-1.5">
                       <span>{item.icon}</span>
                       <span>{item.label}</span>
                     </span>
@@ -406,21 +406,21 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
               </div>
 
               {/* Policy Disclaimer Banner */}
-              <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 flex items-start gap-3">
-                <ShieldAlert className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  <strong className="text-amber-400 font-bold">Important Policy Compliance Notice:</strong> PublisherAI automatically generates your website with semantic code, mobile-first design, original high-word-count guides, and required legal pages (`Privacy Policy with DART disclosure`, `Terms`, `Disclaimer`). However, final AdSense monetization approval rests entirely with Google&apos;s independent review team.
+              <div className="rounded-2xl border border-amber-300 bg-amber-50 p-4 flex items-start gap-3">
+                <ShieldAlert className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+                <p className="text-xs text-slate-800 leading-relaxed">
+                  <strong className="text-amber-900 font-bold">Important Policy Compliance Notice:</strong> PublisherAI automatically generates your website with semantic code, mobile-first design, original high-word-count guides, and required legal pages (`Privacy Policy with DART disclosure`, `Terms`, `Disclaimer`). However, final AdSense monetization approval rests entirely with Google&apos;s independent review team.
                 </p>
               </div>
             </div>
           )}
 
           {/* Navigation Footer */}
-          <div className="mt-8 flex items-center justify-between border-t border-border/60 pt-5">
+          <div className="mt-8 flex items-center justify-between border-t border-slate-100 pt-5">
             <button
               type="button"
               onClick={step === 1 ? onCancel : handlePrev}
-              className="flex items-center gap-2 rounded-xl border border-slate-700 px-4 py-2.5 text-xs font-bold text-slate-300 hover:bg-slate-800 transition-all"
+              className="flex items-center gap-2 rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition-all"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>{step === 1 ? 'Cancel Wizard' : 'Previous Step'}</span>
@@ -430,7 +430,7 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
               <button
                 type="button"
                 onClick={handleNext}
-                className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-2.5 text-xs font-bold text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 transition-all"
+                className="flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-2.5 text-xs font-bold text-white shadow-md shadow-indigo-500/20 hover:bg-indigo-700 transition-all"
               >
                 <span>Continue to Step {step + 1}</span>
                 <ArrowRight className="h-4 w-4" />
@@ -438,7 +438,7 @@ export default function RequirementWizard({ onComplete, onCancel }: RequirementW
             ) : (
               <button
                 type="submit"
-                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-indigo-600 px-6 py-2.5 text-xs font-bold text-white shadow-xl shadow-emerald-500/25 hover:scale-[1.02] transition-all"
+                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-indigo-600 px-6 py-2.5 text-xs font-bold text-white shadow-md shadow-emerald-500/20 hover:scale-[1.02] transition-all"
               >
                 <Sparkles className="h-4 w-4 stroke-[2.5]" />
                 <span>Launch 16 AI Agents & Generate Site</span>
