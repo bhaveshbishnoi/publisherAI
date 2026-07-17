@@ -99,3 +99,18 @@ class FileUpdateRequest(BaseModel):
 
 class AiModifyRequest(BaseModel):
     prompt: str
+
+class SettingsUpdateRequest(BaseModel):
+    provider: str = "hybrid"
+    openai_api_key: Optional[str] = ""
+    gemini_api_key: Optional[str] = ""
+    anthropic_api_key: Optional[str] = ""
+    model_name: Optional[str] = "gpt-4o"
+
+class SettingsResponse(BaseModel):
+    provider: str
+    openai_api_key_masked: str
+    gemini_api_key_masked: str
+    anthropic_api_key_masked: str
+    model_name: str
+

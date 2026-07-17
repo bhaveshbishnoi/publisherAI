@@ -4,15 +4,16 @@ from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Dict, Any, Optional
 from app.models import (
-    ProjectRequirements, GeneratedProject, FileUpdateRequest, AiModifyRequest
+    ProjectRequirements, GeneratedProject, FileUpdateRequest, AiModifyRequest,
+    SettingsUpdateRequest, SettingsResponse
 )
-from app.storage import ProjectStorage
+from app.db import DatabaseStore, init_db
 from app.engine import run_pipeline
 
 app = FastAPI(
-    title="PublisherAI FastAPI Backend",
-    description="AI Agent platform for generating production-ready, AdSense-ready websites using HTML5, CSS3, Vanilla JS, PHP, and MySQL.",
-    version="2.4.0"
+    title="PublisherAI FastAPI Backend (SQLite Powered)",
+    description="Enterprise AI Agent platform generating production-ready, AdSense-ready websites using SQLite database storage and live API integrations.",
+    version="2.5.0"
 )
 
 app.add_middleware(
@@ -23,26 +24,60 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+def startup_event():
+    init_db()
+
 @app.get("/api/health")
 def health_check():
     return {
         "status": "ok",
-        "version": "2.4.0",
-        "engine": "PublisherAI Multi-Agent FastAPI Engine",
+        "version": "2.5.0",
+        "engine": "PublisherAI Multi-Agent FastAPI + SQLite Engine",
+        "database": "SQLite (publisherai.db)",
         "framework": "FastAPI (Python 3)"
     }
 
+def mask_key(key: str) -> str:
+    if not key or len(key) < 8:
+        return ""
+    return key[:4] + "••••••••" + key[-4:]
+
+@app.get("/api/settings", response_model=SettingsResponse)
+def get_settings():
+    raw = DatabaseStore.get_settings()
+    return SettingsResponse(
+        provider=raw.get("provider", "hybrid"),
+        openai_api_key_masked=mask_key(raw.get("openai_api_key", "")),
+        gemini_api_key_masked=mask_key(raw.get("gemini_api_key", "")),
+        anthropic_api_key_masked=mask_key(raw.get("anthropic_api_key", "")),
+        model_name=raw.get("model_name", "gpt-4o")
+    )
+
+@app.post("/api/settings", response_model=Dict[str, Any])
+def update_settings(payload: SettingsUpdateRequest):
+    current = DatabaseStore.get_settings()
+    updated = {
+        "provider": payload.provider,
+        "model_name": payload.model_name or current.get("model_name", "gpt-4o"),
+        "openai_api_key": payload.openai_api_key if payload.openai_api_key is not None and not payload.openai_api_key.startswith("sk-••••") else current.get("openai_api_key", ""),
+        "gemini_api_key": payload.gemini_api_key if payload.gemini_api_key is not None and not payload.gemini_api_key.startswith("AIza••••") else current.get("gemini_api_key", ""),
+        "anthropic_api_key": payload.anthropic_api_key if payload.anthropic_api_key is not None and not payload.anthropic_api_key.startswith("sk-ant••••") else current.get("anthropic_api_key", "")
+    }
+    DatabaseStore.save_settings(updated)
+    return {"status": "success", "message": "Settings saved to SQLite database successfully"}
+
 @app.get("/api/projects", response_model=Dict[str, Any])
 def list_projects():
-    projects = ProjectStorage.get_all_requirements()
+    projects = DatabaseStore.get_all_requirements()
     return {"status": "success", "data": projects}
 
 @app.get("/api/projects/{proj_id}", response_model=Dict[str, Any])
 def get_project(proj_id: str):
-    req = ProjectStorage.get_requirement(proj_id)
+    req = DatabaseStore.get_requirement(proj_id)
     if not req:
-        raise HTTPException(status_code=404, detail="Project not found")
-    generated = ProjectStorage.get_generated_project(proj_id)
+        raise HTTPException(status_code=404, detail="Project not found in SQLite database")
+    generated = DatabaseStore.get_generated_project(proj_id)
     return {
         "status": "success",
         "data": {
@@ -53,27 +88,28 @@ def get_project(proj_id: str):
 
 @app.post("/api/projects", response_model=Dict[str, Any], status_code=201)
 def create_project(req: ProjectRequirements):
-    ProjectStorage.save_requirement(req)
+    DatabaseStore.save_requirement(req)
     return {"status": "success", "data": req}
 
 @app.post("/api/projects/{proj_id}/generate", response_model=Dict[str, Any])
 def generate_project(proj_id: str, payload: Optional[ProjectRequirements] = None):
-    req = ProjectStorage.get_requirement(proj_id)
+    req = DatabaseStore.get_requirement(proj_id)
     if not req and payload:
         req = payload
-        ProjectStorage.save_requirement(req)
+        DatabaseStore.save_requirement(req)
     if not req:
         raise HTTPException(status_code=404, detail="Project requirements not found")
 
-    generated = run_pipeline(req)
-    ProjectStorage.save_generated_project(generated)
+    settings = DatabaseStore.get_settings()
+    generated = run_pipeline(req, settings=settings)
+    DatabaseStore.save_generated_project(generated)
     return {"status": "success", "data": generated}
 
 @app.post("/api/projects/{proj_id}/update-file", response_model=Dict[str, Any])
 def update_file(proj_id: str, update_req: FileUpdateRequest):
-    generated = ProjectStorage.get_generated_project(proj_id)
+    generated = DatabaseStore.get_generated_project(proj_id)
     if not generated:
-        raise HTTPException(status_code=404, detail="Generated project not found")
+        raise HTTPException(status_code=404, detail="Generated project not found in SQLite database")
 
     updated_files = []
     for f in generated.files:
@@ -83,14 +119,14 @@ def update_file(proj_id: str, update_req: FileUpdateRequest):
         updated_files.append(f)
 
     generated.files = updated_files
-    ProjectStorage.save_generated_project(generated)
+    DatabaseStore.save_generated_project(generated)
     return {"status": "success", "data": generated}
 
 @app.post("/api/projects/{proj_id}/ai-modify", response_model=Dict[str, Any])
 def ai_modify(proj_id: str, modify_req: AiModifyRequest):
-    generated = ProjectStorage.get_generated_project(proj_id)
+    generated = DatabaseStore.get_generated_project(proj_id)
     if not generated:
-        raise HTTPException(status_code=404, detail="Generated project not found")
+        raise HTTPException(status_code=404, detail="Generated project not found in SQLite database")
 
     prompt = modify_req.prompt.lower()
     ai_reply = "Modification successfully processed by PublisherAI Agent."
@@ -107,13 +143,13 @@ def ai_modify(proj_id: str, modify_req: AiModifyRequest):
             )
             ai_reply = "✓ Added Math CAPTCHA validation check to `api/contact.php`."
 
-    ProjectStorage.save_generated_project(generated)
+    DatabaseStore.save_generated_project(generated)
     return {"status": "success", "reply": ai_reply, "data": generated}
 
 @app.get("/api/projects/{proj_id}/export-zip")
 def export_zip(proj_id: str):
-    generated = ProjectStorage.get_generated_project(proj_id)
-    req = ProjectStorage.get_requirement(proj_id)
+    generated = DatabaseStore.get_generated_project(proj_id)
+    req = DatabaseStore.get_requirement(proj_id)
     if not generated or not req:
         raise HTTPException(status_code=404, detail="Project code not found for zip export")
 

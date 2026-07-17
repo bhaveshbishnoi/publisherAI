@@ -37,8 +37,9 @@ WORKFLOW_STEPS_DEFINITION = [
 ]
 
 class AgentExecutor:
-    def __init__(self, req: ProjectRequirements):
+    def __init__(self, req: ProjectRequirements, settings: Dict[str, Any] = None):
         self.req = req
+        self.settings = settings or {}
         self.files: List[GeneratedFile] = []
         self.logs: List[AgentLogMessage] = []
         self.auditReport: AdSenseAuditReport = AdSenseAuditReport(
@@ -64,8 +65,9 @@ class AgentExecutor:
 
     def run_step(self, step_idx: int) -> AgentLogMessage:
         req = self.req
+        provider = self.settings.get("provider", "hybrid")
         if step_idx == 1:
-            return self._log(1, f"Validated target identity: '{req.name}' ({req.domain}) in category '{req.category}'. Target audience: '{req.primaryAudience}'.")
+            return self._log(1, f"Validated target identity: '{req.name}' ({req.domain}) in category '{req.category}'. Target audience: '{req.primaryAudience}' [Provider: {provider.upper()}].")
         elif step_idx == 2:
             return self._log(2, f"Analyzed search intent for primary keyword '{req.primaryKeyword}' across '{req.country}'. Identified informational & transactional guides.")
         elif step_idx == 3:
@@ -137,8 +139,8 @@ class AgentExecutor:
             ]
             return self._log(22, f"Executed 14-point AdSense Readiness Audit. Overall Score: {self.auditReport.overallScore}/100 ({self.auditReport.readinessLevel}).")
 
-def run_pipeline(req: ProjectRequirements) -> GeneratedProject:
-    executor = AgentExecutor(req)
+def run_pipeline(req: ProjectRequirements, settings: Dict[str, Any] = None) -> GeneratedProject:
+    executor = AgentExecutor(req, settings=settings)
     steps = []
     for step_def in WORKFLOW_STEPS_DEFINITION:
         steps.append(WorkflowStep(**step_def, status="PENDING"))
