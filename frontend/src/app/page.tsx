@@ -75,9 +75,9 @@ export default function WorkspaceHome() {
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-10 space-y-12 animate-in fade-in duration-300">
         {/* Centered Light Hero Section */}
-        <section className="relative rounded-3xl border border-slate-200/90 bg-white p-8 sm:p-12 shadow-md overflow-hidden">
-          <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-sky-500/10 blur-3xl pointer-events-none" />
+        <section className="relative rounded-3xl border border-slate-200/90 bg-white p-8 sm:p-12 shadow-sm hover:shadow-xl transition-all duration-700 ease-out overflow-hidden group">
+          <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none group-hover:bg-indigo-500/20 transition-colors duration-700" />
+          <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-sky-500/10 blur-3xl pointer-events-none group-hover:bg-sky-500/20 transition-colors duration-700" />
 
           <div className="relative z-10 max-w-3xl mx-auto text-center space-y-5">
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50/80 px-3.5 py-1.5 text-xs font-bold text-indigo-700 shadow-2xs">
@@ -139,12 +139,12 @@ export default function WorkspaceHome() {
               desc: 'Download all generated code files instantly alongside Apache .htaccess rules and cPanel deployment guides.',
             },
           ].map((feat, idx) => (
-            <div key={idx} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 border border-indigo-100 mb-4">
+            <div key={idx} className="group rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm hover:shadow-xl hover:border-indigo-200 hover:-translate-y-1 transition-all duration-300">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50/80 border border-indigo-100 mb-5 group-hover:scale-110 transition-transform duration-300">
                 {feat.icon}
               </div>
-              <h3 className="text-base font-bold text-slate-900">{feat.title}</h3>
-              <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{feat.desc}</p>
+              <h3 className="text-base font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">{feat.title}</h3>
+              <p className="mt-2 text-xs text-slate-600 leading-relaxed">{feat.desc}</p>
             </div>
           ))}
         </section>
@@ -173,9 +173,10 @@ export default function WorkspaceHome() {
               <div
                 key={proj.id}
                 onClick={() => handleOpenStarter(proj)}
-                className="group relative cursor-pointer rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-indigo-400 hover:shadow-lg flex flex-col justify-between h-[310px]"
+                className="group relative cursor-pointer rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-indigo-300 hover:shadow-xl flex flex-col justify-between h-[310px] overflow-hidden"
               >
-                <div>
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className="relative z-10">
                   <div className="flex items-center justify-between mb-3">
                     <span className="rounded-full bg-indigo-50 border border-indigo-200 px-3 py-1 text-[11px] font-bold text-indigo-700">
                       {proj.category}

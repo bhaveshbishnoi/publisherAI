@@ -93,6 +93,17 @@ export default function Navbar({ onOpenWizard }: { onOpenWizard?: () => void }) 
                 <Layers className="h-4 w-4" />
                 <span>Workspace Studio</span>
               </Link>
+              <Link
+                href="/policies"
+                className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-all ${
+                  pathname === '/policies'
+                    ? 'bg-indigo-50 text-indigo-700 border border-indigo-200/80 shadow-xs font-semibold'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                }`}
+              >
+                <ShieldCheck className="h-4 w-4" />
+                <span>Policies</span>
+              </Link>
             </nav>
           </div>
 
